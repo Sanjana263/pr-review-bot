@@ -12,17 +12,20 @@ function verifySignature(req) {
   const secret    = process.env.GITHUB_WEBHOOK_SECRET;
   const signature = req.headers['x-hub-signature-256'];
 
-  if (!signature) return false;
+  if (!secret || !signature) return false;
 
   const expected = 'sha256=' + crypto
     .createHmac('sha256', secret)
     .update(req.body)
     .digest('hex');
 
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expected)
-  );
+  const sigBuffer = Buffer.from(signature);
+  const expBuffer = Buffer.from(expected);
+
+  // timingSafeEqual throws if buffers differ in length, so guard first
+  if (sigBuffer.length !== expBuffer.length) return false;
+
+  return crypto.timingSafeEqual(sigBuffer, expBuffer);
 }
 
 // ── Webhook endpoint ───────────────────────────────────────────────────────
