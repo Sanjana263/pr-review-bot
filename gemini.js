@@ -37,7 +37,12 @@ ${diff}
   );
 
   // Gemini returns candidates — grab the first one's text
-  const text = response.data.candidates[0].content.parts[0].text;
+  const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+  if (!text) {
+    throw new Error('Gemini returned no reviewable content (empty or blocked response)');
+  }
+
   return text;
 }
 
