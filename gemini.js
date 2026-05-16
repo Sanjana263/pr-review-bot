@@ -3,7 +3,7 @@ const axios = require('axios');
 // ── Send the diff to Gemini and get a code review back ────────────────────
 async function getGeminiReview(diff) {
   const apiKey = process.env.GEMINI_API_KEY;
-  const url    = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const url    = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
   const prompt = `
 You are a senior software engineer performing a code review.
